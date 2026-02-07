@@ -34,7 +34,7 @@ def salvar_gastos(wb, dados):
                dados['valor_total'],
                dados['forma_de_pagamento'],
                dados['parcelado'],
-               dados['numero_de_parcelas'],
-               dados['total_parcelas']
+               dados['numero_parcelas'],
+               dados['valor_parcela']
                ])
     wb.save(arquivo_excel)

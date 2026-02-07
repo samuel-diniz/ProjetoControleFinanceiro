@@ -72,24 +72,37 @@ def pedir_forma_pagamento():
         print("2 - Crédito")
         print("3 - Débito")
         print("4 - Dinheiro")
+        
         opcao = input("Opção: ").strip()
-        formas = {
-            '1': 'Pix',
-            '2': 'Crédito',
-            '3': 'Débito',
-            '4': 'Dinheiro'
-        }
-        if opcao in formas:
-            if opcao == '2':
-                pergunta = input('À Vista ou Parcelado? (V/P): ').strip().upper()
-                if pergunta == 'V':
-                    return 'Crédito à Vista'
-                elif pergunta == 'P':
-                    parcela = input('Número de parcelas: ').strip()
-                    if parcela.isdigit() and int(parcela) > 0:
-                        return f'Crédito Parcelado em {parcela}x'
+        
+        if opcao == '1':
+            return {'tipo': 'Pix', 'parcelado': False, 'numero_parcelas': None}
+        
+        elif opcao == '2':
+            while True:
+                tipo = str(input('À Vista ou Parcelado? (V/P)')).strip().upper()
+
+                if tipo == 'V':
+                    return {'tipo': 'Crédito', 'parcelado': False, 'numero_parcelas': None}
+                
+                elif tipo == 'P':
+                    parcelas = input('Número de parcelas: ').strip()
+                    if parcelas.isdigit() and int(parcelas) > 0:
+                        return {
+                            'tipo': 'Crédito',
+                            'parcelado': True,
+                            'numero_parcelas': int(parcelas)
+                        }
+                    else:
+                        print('Número de parcelas inválido.')
                 else:
-                    print("Opção inválida. Por favor, escolha V para À Vista ou P para Parcelado.")
-            return formas[opcao]
+                    print('Opção inválida. Escolha V ou P')
+
+        elif opcao == '3':
+            return {'tipo': 'Débito', 'parcelado': False, 'numero_parcelas': None}
+        
+        elif opcao == '4':
+            return {'tipo': 'Dinheiro', 'parcelado': False, 'numero_parcelas': None}
+        
         else:
-            print("Opção inválida. Por favor, escolha uma forma de pagamento válida.")
+            print('Opção inválida. Por favor, escolha uma opção válida.')
