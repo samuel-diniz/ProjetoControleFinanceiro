@@ -2,6 +2,7 @@ from inputs import escolher_aba, pedir_data, pedir_texto, pedir_valor, pedir_cat
 from excel_manager import carregar_planilha, salvar_entrada, salvar_gastos
 from datetime import date
 from dateutil.relativedelta import relativedelta
+from config import arquivo_excel
 
 
 def main():
@@ -14,18 +15,16 @@ def main():
     
     elif aba == 'E':
         print("Você escolheu registrar uma nova ENTRADA.")
-        data = pedir_data()
-        descricao = pedir_texto('Descrição: ')
-        categoria = pedir_categoria()
-        valor = pedir_valor('Valor: ')
-        forma_pagamento = pedir_forma_pagamento()
-        salvar_entrada(wb, {
-            'data': data,
-            'descricao': descricao,
-            'categoria': categoria,
-            'valor': valor,
-            'forma_de_pagamento': forma_pagamento
-        })
+        dados = {
+            'data': pedir_data(),
+            'descricao': pedir_texto('Descrição: '),
+            'categoria': pedir_categoria(),
+            'valor': pedir_valor('Valor: '),
+            'forma_pagamento': pedir_forma_pagamento()['tipo']
+        }   
+        salvar_entrada(wb, dados)
+        wb.save(arquivo_excel)
+        
         print("Entrada registrada com sucesso!")
         
     elif aba == 'G':
@@ -37,19 +36,19 @@ def main():
         forma_pagamento = pedir_forma_pagamento()
 
         if forma_pagamento['parcelado']:
-            valor_parcela = round(valor / forma_pagamento['numero_parcelas'], 2)
+            num_parcelas = forma_pagamento['numero_parcelas']
+            valor_parcela = round(valor / num_parcelas, 2)
 
-            for i in range(forma_pagamento['numero_parcelas']):
-                data_parcela = data + relativedelta(month=i)
+            for i in range(num_parcelas):
 
                 salvar_gastos(wb, {
-                'data': data_parcela,
-                'descricao': f"{descricao} ({i+1}/{forma_pagamento['numero_parcelas']})",
+                'data': data + relativedelta(months=i),
+                'descricao': f"{descricao} ({i+1}/{num_parcelas})",
                 'categoria': categoria,
                 'valor_total': valor,
                 'forma_de_pagamento': forma_pagamento['tipo'],
                 'parcelado': True,
-                'numero_parcelas': forma_pagamento['numero_parcelas'],
+                'numero_parcelas': num_parcelas,
                 'valor_parcela': valor_parcela
         })
         else:
@@ -63,6 +62,7 @@ def main():
                 'numero_parcelas': None,
                 'valor_parcela': None
             })
+        wb.save(arquivo_excel)
         print('Gasto registrado com sucesso!')
 
 if __name__ == "__main__":
