@@ -12,29 +12,30 @@ def carregar_planilha():
 def salvar_entrada(wb, dados):
     ws = wb[aba_entradas]
 
-    ws.append([dados['data'].day, 
-               dados['data'].month, 
-               dados['data'].year,
-               dados['descricao'],
-               dados['categoria'], 
-               dados['valor'],
-               dados['forma_de_pagamento']
+    ws.append([
+        dados['data'].day, 
+        dados['data'].month, 
+        dados['data'].year,
+        dados['descricao'],
+        dados['categoria'], 
+        dados['valor'],
+        dados['forma_de_pagamento']
                ])
-    wb.save(arquivo_excel)
+  
 
 
 def salvar_gastos(wb, dados):
     ws = wb[aba_gastos]
 
-    ws.append([dados['data'].day, 
-               dados['data'].month, 
-               dados['data'].year,
-               dados['descricao'],
-               dados['categoria'], 
-               dados['valor_total'],
-               dados['forma_de_pagamento'],
-               dados['parcelado'],
-               dados['numero_parcelas'],
-               dados['valor_parcela']
+    ws.append([
+        dados['data'].day, 
+        dados['data'].month, 
+        dados['data'].year,
+        dados['descricao'],
+        dados['categoria'], 
+        dados['valor_total'],
+        dados['forma_de_pagamento'],
+        dados['parcelado'],
+        dados['numero_parcelas'],
+        dados['valor_parcela']
                ])
-    wb.save(arquivo_excel)
