@@ -12,18 +12,43 @@ def gerar_resumo_mensal():
     resumo = defaultdict(lambda: {'entradas': 0, 'gastos': 0})
 
     for row in ws_entradas.iter_rows(min_row=2, values_only=True):
-        if row[0] is None:
+        if len(row) < 6:
             continue
+        dia, mes, ano, *_, valor, _ = row
 
-        dia, mes, ano, descricao, categoria, valor, forma_pagamento = row
-        resumo[(mes, ano)]['entradas'] += valor
+        if mes is None or ano is None or valor is None:
+            continue
+        resumo[(int(mes), int(ano))]['entradas'] += float(valor)
 
     for row in ws_gastos.iter_rows(min_row=2, values_only=True):
-        if row[0] is None:
+        if len(row) < 10:
             continue
 
-        dia, mes, ano, descricao, categoria, valor, *_ = row
-        resumo[(mes, ano)]['gastos'] += valor
+        (
+            dia,
+            mes,
+            ano,
+            descricao,
+            categoria,
+            valor_total,
+            forma_pagamento,
+            parcelado,
+            numero_parcelas,
+            valor_parcela
+        ) = row
+
+        if mes is None or ano is None:
+            continue
+
+        if parcelado:
+            if valor_parcela is None:
+                continue
+            resumo[(int(mes), int(ano))]['gastos'] += float(valor_parcela)
+        
+        else:
+            if valor_total is None:
+                continue
+            resumo[(int(mes), int(ano))]['gastos'] += float(valor_total)
 
     if ws_resumo.max_row > 1:
         ws_resumo.delete_rows(2, ws_resumo.max_row)

@@ -4,15 +4,18 @@ from datetime import datetime
 def escolher_aba():
     while True:
         print('Escolha o tipo de registro:')
-        print('1 - Entradas')
-        print('2 - Gastos')
-        print('0 - Sair')
-        opcao = input('Opção: ').strip()
-        if opcao == '1':
+        print('E - Entradas')
+        print('G - Gastos')
+        print('R - Gerar Resumo')
+        print('S - Sair')
+        opcao = input('Opção: ').strip().upper()
+        if opcao == 'E':
             return 'E'
-        elif opcao == '2':
+        elif opcao == 'G':
             return 'G'
-        elif opcao == '0':
+        elif opcao == 'R':
+            return 'R'
+        elif opcao == 'S':
             return None
         else:
             print("Opção inválida. Por favor, escolha uma opção válida.")

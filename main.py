@@ -15,12 +15,14 @@ def main():
     elif aba == 'E':
         registrar_entrada(wb)
         print('ENTRADA REGISTRADA COM SUCESSO!')
-        
+    
     elif aba == 'G':
         registrar_gasto(wb)
         print('GASTO REGISTRADO COM SUCESSO!')
-
-    gerar_resumo_mensal()
+    
+    elif aba == 'R':
+        gerar_resumo_mensal()
+        print('RESUMO MENSAL ATUALIZADO COM SUCESSO!')
 
 if __name__ == "__main__":
     main()
