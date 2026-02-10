@@ -1,7 +1,7 @@
 from datetime import date
-from excel_manager import carregar_planilha
+from database.models import criar_tabelas
 from services.finance import registrar_entrada, registrar_gasto
-from services.resumo import gerar_resumo_mensal
+from services.resumo import gerar_resumo_mensal, obter_saldo_mensal
 
 
 def menu_principal():
@@ -14,40 +14,37 @@ def menu_principal():
     return input('Escolha uma opção: ').strip()
 
 
-def ver_saldo_atual(wb):
+def ver_saldo_atual():
     hoje = date.today()
     mes_atual = hoje.month
     ano_atual = hoje.year
 
-    ws_resumo = wb['RESUMO']
+    saldo = obter_saldo_mensal(mes_atual, ano_atual)
 
-    for row in ws_resumo.iter_rows(min_row = 2, values_only=True):
-        mes, ano, entradas, gastos, saldo = row
-
-        if mes == mes_atual and ano == ano_atual:
-            print(f'\nSALDO de {mes:02d}/{ano}: R$ {saldo:.2f}')
-            return
-    print(f'Nenhum registro encontrado para {mes_atual:02d}/{ano_atual}')
+    if saldo is not None:
+        print(f'\nSaldo de {mes_atual:02d}/{ano_atual}: R${saldo:.2f}')
+    else:
+        print(f'Nenhum registro encontrado para {mes_atual:02d}/{ano_atual}')
 
 
 def main():
-    wb = carregar_planilha()
+    criar_tabelas()
     
     while True:
         opcao = menu_principal()
         
         if opcao == '1':
-            registrar_entrada(wb)
+            registrar_entrada()
         
         elif opcao == '2':
-            registrar_gasto(wb)
+            registrar_gasto()
         
         elif opcao == '3':
             gerar_resumo_mensal()
             print('RESUMO MENSAL ATUALIZADO!')
         
         elif opcao == '4':
-            ver_saldo_atual(wb)
+            ver_saldo_atual()
         
         elif opcao == '0':
             print('ENCERRANDO O PROGRAMA.')
