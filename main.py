@@ -1,17 +1,27 @@
 from datetime import date
+from rich.console import Console
+from rich.panel import Panel
+from rich.prompt import Prompt
 from database.models import criar_tabelas
 from services.finance import registrar_entrada, registrar_gasto
 from services.resumo import gerar_resumo_mensal, obter_saldo_mensal
 
+console = Console()
+
 
 def menu_principal():
-    print('\n=== CONTROLE FINANCEIRO ===')
-    print('1 - Registrar entrada')
-    print('2 - Registrar gasto')
-    print('3 - Atualizar resumo mensal')
-    print('4 - Ver saldo do mês atual')
-    print('0 - Sair')
-    return input('Escolha uma opção: ').strip()
+    console.print(
+        Panel.fit(
+            "[bold cyan]CONTROLE FINANCEIRO[/bold cyan]\n"
+            "[1] Registrar entrada\n"
+            "[2] Registrar gasto\n"
+            "[3] Atualizar resumo mensal\n"
+            "[4] Ver saldo do mês atual\n"
+            "[0] Sair",
+            border_style="cyan"
+        )
+    )
+    return Prompt.ask("Escolha uma opção", choices=["1", "2", "3", "4", "0"])
 
 
 def ver_saldo_atual():
