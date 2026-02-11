@@ -70,3 +70,23 @@ def obter_saldo_mensal(mes, ano):
     conn.close()
 
     return total_entradas - total_gastos
+
+
+def ranking_anual(ano):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT categoria, SUM(valor) as total
+        FROM gastos
+        WHERE strftime('%Y', data) = ?
+        GROUP BY categoria
+        ORDER BY total DESC
+    """, (str(ano),))
+
+    rows = cursor.fetchall()
+    conn.cursor()
+
+    print(f'\nRanking de Gastos - {ano}')
+    for i, row in enumerate(rows, 1):
+        print(f'{i}. {row[0]} -> R$ {row[1]:.2f}')
