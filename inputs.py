@@ -13,17 +13,26 @@ def pedir_data():
 def pedir_texto(msg):
     while True:
         texto = str(input(msg)).strip()
-        if texto and not texto.isnumeric():
-            return texto
-        else:
-            erro("Entrada inválida. Por favor, insira um texto válido.")
 
+        if not texto:
+            erro('Campo não pode ser vazio')
+            continue
+        if texto.isnumeric():
+            erro("Por favor, insira um texto válido.")
+            continue
+
+        return texto
 
 def pedir_valor(msg):
     while True:
         try:
             valor = float(input(msg).replace(',', '.'))
+            if valor <= 0:
+                erro('O valor deve ser maior que zero.')
+                continue
+
             return valor
+        
         except ValueError:
             erro("Valor inválido. Por favor, insira um número válido.")
 
@@ -70,14 +79,23 @@ def pedir_forma_pagamento():
                 
                 elif tipo == 'P':
                     parcelas = input('Número de parcelas: ').strip()
-                    if parcelas.isdigit() and int(parcelas) > 0:
-                        return {
-                            'tipo': 'Crédito',
-                            'parcelado': True,
-                            'numero_parcelas': int(parcelas)
-                        }
-                    else:
-                        erro('Número de parcelas inválido.')
+
+                    if not parcelas.isdigit():
+                        erro('Digite apenas números')
+                        continue
+                    
+                    parcelas = int(parcelas)
+
+                    if parcelas <= 1:
+                        erro('Parcelamento deve ser maior que 1.')
+                        continue
+
+                    return {
+                        'tipo': 'Crédito',
+                        'parcelado': True,
+                        'numero_parcelas': int(parcelas)
+                    }
+                
                 else:
                     erro('Opção inválida. Escolha V ou P')
 
