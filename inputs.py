@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from utils.ui import erro
 
 def pedir_data():
     while True:
@@ -7,7 +7,7 @@ def pedir_data():
             data = input("Data (DD/MM/AAAA): ").strip()
             return datetime.strptime(data, "%d/%m/%Y").date()
         except ValueError:
-            print("Data inválida. Por favor, insira no formato DD/MM/AAAA.")
+            erro("Data inválida. Por favor, insira no formato DD/MM/AAAA.")
 
 
 def pedir_texto(msg):
@@ -16,7 +16,7 @@ def pedir_texto(msg):
         if texto and not texto.isnumeric():
             return texto
         else:
-            print("Entrada inválida. Por favor, insira um texto válido.")
+            erro("Entrada inválida. Por favor, insira um texto válido.")
 
 
 def pedir_valor(msg):
@@ -25,7 +25,7 @@ def pedir_valor(msg):
             valor = float(input(msg).replace(',', '.'))
             return valor
         except ValueError:
-            print("Valor inválido. Por favor, insira um número válido.")
+            erro("Valor inválido. Por favor, insira um número válido.")
 
 
 def pedir_categoria():
@@ -45,7 +45,7 @@ def pedir_categoria():
         if opcao in categorias:
             return categorias[opcao]
         else:
-            print("Opção inválida. Por favor, escolha uma categoria válida.")
+            erro("Opção inválida. Por favor, escolha uma categoria válida.")
 
 
 def pedir_forma_pagamento():
@@ -77,9 +77,9 @@ def pedir_forma_pagamento():
                             'numero_parcelas': int(parcelas)
                         }
                     else:
-                        print('Número de parcelas inválido.')
+                        erro('Número de parcelas inválido.')
                 else:
-                    print('Opção inválida. Escolha V ou P')
+                    erro('Opção inválida. Escolha V ou P')
 
         elif opcao == '3':
             return {'tipo': 'Débito', 'parcelado': False, 'numero_parcelas': None}
@@ -88,4 +88,4 @@ def pedir_forma_pagamento():
             return {'tipo': 'Dinheiro', 'parcelado': False, 'numero_parcelas': None}
         
         else:
-            print('Opção inválida. Por favor, escolha uma opção válida.')
+            erro('Opção inválida. Por favor, escolha uma opção válida.')

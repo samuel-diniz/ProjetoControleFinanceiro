@@ -5,6 +5,7 @@ from rich.prompt import Prompt
 from database.models import criar_tabelas
 from services.finance import registrar_entrada, registrar_gasto
 from services.resumo import gerar_resumo_mensal, obter_saldo_mensal
+from utils.ui import sucesso, erro, aviso
 
 console = Console()
 
@@ -51,17 +52,17 @@ def main():
         
         elif opcao == '3':
             gerar_resumo_mensal()
-            print('RESUMO MENSAL ATUALIZADO!')
+            sucesso('RESUMO MENSAL ATUALIZADO!')
         
         elif opcao == '4':
             ver_saldo_atual()
         
         elif opcao == '0':
-            print('ENCERRANDO O PROGRAMA.')
+            aviso('ENCERRANDO O PROGRAMA.')
             break
         
         else:
-            print('Opção Inválida. Por favor escolha uma opção válida.')
+            erro('Opção Inválida. Por favor escolha uma opção válida.')
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,7 @@
 from inputs import pedir_data, pedir_texto, pedir_valor, pedir_categoria, pedir_forma_pagamento
 from database.repository import inserir_entrada, inserir_gasto
 from dateutil.relativedelta import relativedelta
+from utils.ui import sucesso
 
 
 def registrar_entrada():
@@ -14,7 +15,7 @@ def registrar_entrada():
         'forma_pagamento': pedir_forma_pagamento()['tipo']
     }   
     inserir_entrada(dados)
-    print('ENTRADA REGISTRADA COM SUCESSO!')
+    sucesso('ENTRADA REGISTRADA COM SUCESSO!')
         
 
 def registrar_gasto():
@@ -53,5 +54,5 @@ def registrar_gasto():
             'parcelado': False,
             'numero_parcelas': None
         })
-    print('GASTO REGISTRADO COM SUCESSO!')
+    sucesso('GASTO REGISTRADO COM SUCESSO!')
     
