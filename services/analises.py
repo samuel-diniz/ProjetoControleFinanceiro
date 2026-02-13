@@ -5,6 +5,7 @@ from services.charts import grafico_gastos_mensais, evolucao_saldo
 from services.report_excel import exportar_excel
 from services.report_pdf import exportar_pdf
 from services.resumo import ranking_anual
+from utils.validators import validar_mes, validar_ano
 
 
 def menu_analises():
@@ -25,24 +26,42 @@ def menu_analises():
         opcao = Prompt.ask("Escolha", choices=["1","2","3","4","5","0"])
 
         if opcao == "1":
-            mes = int(Prompt.ask("Mês (1-12)"))
-            ano = int(Prompt.ask("Ano"))
+            mes = None
+            while mes is None:
+                mes = validar_mes()
+
+            ano = None
+            while ano is None:
+                ano = validar_ano()
+
             grafico_gastos_mensais(mes, ano)
 
         elif opcao == "2":
-            ano = int(Prompt.ask("Ano"))
+            ano = None
+            while ano is None:
+                ano = validar_ano()
+
             evolucao_saldo(ano)
 
         elif opcao == "3":
-            ano = int(Prompt.ask("Ano"))
+            ano = None
+            while ano is None:
+                ano = validar_ano()
+
             exportar_pdf(ano)
 
         elif opcao == "4":
-            ano = int(Prompt.ask("Ano"))
+            ano = None
+            while ano is None:
+                ano = validar_ano()
+
             exportar_excel(ano)
 
         elif opcao == "5":
-            ano = int(Prompt.ask("Ano"))
+            ano = None
+            while ano is None:
+                ano = validar_ano()
+                
             ranking_anual(ano)
 
         elif opcao == "0":
