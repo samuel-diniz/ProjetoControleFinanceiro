@@ -5,8 +5,7 @@ from rich.prompt import Prompt
 from rich.panel import Panel
 from database.connection import get_connection
 from utils.ui import console, mostrar_saldo, titulo, erro
-
-
+from database.repository import obter_totais_mes
 
 
 def menu_dashboard():
@@ -24,36 +23,16 @@ def menu_dashboard():
     return Prompt.ask("Escolha: ", choices=["1", "2", "3", "4", "0"])
 
 
-def obter_totais(mes, ano):
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        SELECT COALESCE(SUM(valor), 0)
-        FROM entradas
-        WHERE strftime('%m', data) = ?
-        AND strftime('%Y', data) = ?
-    """, (f"{mes:02d}", str(ano)))
-    entradas = cursor.fetchone()[0]
-
-    cursor.execute("""
-        SELECT COALESCE(SUM(valor), 0)
-        FROM gastos
-        WHERE strftime('%m', data) = ?
-        AND strftime('%Y', data) = ?
-    """, (f"{mes:02d}", str(ano)))
-    gastos = cursor.fetchone()[0]
-
-
-    conn.close()
-    return entradas, gastos
-
-
 def ver_mes_especifico():
     mes = int(Prompt.ask('Mês (1-12)'))
+
+    if mes < 1 or mes > 12:
+        erro("Mês Inválido.")
+        return
+    
     ano = int(Prompt.ask('Ano'))
 
-    entradas, gastos = obter_totais(mes, ano)
+    entradas, gastos = obter_totais_mes(mes, ano)
     saldo = entradas - gastos
 
     titulo(f'MÊS {mes:02d}/{ano}')
@@ -79,8 +58,8 @@ def comparar_meses():
     mes2 = int(Prompt.ask('Mês'))
     ano2 = int(Prompt.ask('Ano'))
 
-    e1, g1 = obter_totais(mes1, ano1)
-    e2, g2 = obter_totais(mes2, ano2)
+    e1, g1 = obter_totais_mes(mes1, ano1)
+    e2, g2 = obter_totais_mes(mes2, ano2)
 
     tabela = Table(box=box.ROUNDED)
     tabela.add_column("Periodo")

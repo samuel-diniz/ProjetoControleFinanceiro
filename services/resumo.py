@@ -2,7 +2,8 @@ from collections import defaultdict
 from rich.table import Table
 from rich.console import Console
 from database.connection import get_connection
-from database.repository import buscar_resumo_mensal
+from database.repository import buscar_resumo_mensal, obter_totais_mes
+
 
 console = Console()
 
@@ -44,32 +45,8 @@ def gerar_resumo_mensal():
 
 
 def obter_saldo_mensal(mes, ano):
-    conn = get_connection()
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        SELECT
-            COALESCE(SUM(valor), 0)
-        FROM entradas
-        WHERE strftime('%m', data) = ?
-        AND strftime('%Y', data) = ?
-    """, (f"{mes:02d}", str(ano)))
-
-    total_entradas = cursor.fetchone()[0]
-
-    cursor.execute("""
-        SELECT
-            COALESCE(SUM(valor), 0)
-        FROM gastos
-        WHERE strftime('%m', data) = ?
-        AND strftime('%Y', data) = ?
-    """, (f"{mes:02d}", str(ano)))
-
-    total_gastos = cursor.fetchone()[0]
-
-    conn.close()
-
-    return total_entradas - total_gastos
+    entradas, gastos = obter_totais_mes(mes, ano)
+    return entradas - gastos
 
 
 def ranking_anual(ano):
@@ -85,8 +62,9 @@ def ranking_anual(ano):
     """, (str(ano),))
 
     rows = cursor.fetchall()
-    conn.cursor()
+    conn.close()
 
     print(f'\nRanking de Gastos - {ano}')
     for i, row in enumerate(rows, 1):
-        print(f'{i}. {row[0]} -> R$ {row[1]:.2f}')
+        total = row[1] or 0
+        print(f'{i}. {row[0]} -> R$ {total:.2f}')

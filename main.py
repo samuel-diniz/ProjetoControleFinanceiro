@@ -7,7 +7,9 @@ from database.models import criar_tabelas
 from services.finance import registrar_entrada, registrar_gasto
 from services.resumo import gerar_resumo_mensal, obter_saldo_mensal
 from services.dashboard import mostrar_dashboard
-from utils.ui import sucesso, erro, aviso, titulo
+from services.listagem import mostrar_entradas, mostrar_gastos
+from services.analises import menu_analises
+from utils.ui import sucesso, erro, aviso
 
 console = Console()
 
@@ -21,11 +23,14 @@ def menu_principal():
             "[3] Atualizar resumo mensal\n"
             "[4] Ver saldo do mês atual\n"
             "[5] Dashboard do mês atual\n"
+            "[6] Listar entradas\n"
+            "[7] Listar gastos\n"
+            "[8] Análises e Relatórios\n"
             "[0] Sair",
             border_style="cyan"
         )
     )
-    return Prompt.ask("Escolha uma opção", choices=["1", "2", "3", "4", "5", "0"])
+    return Prompt.ask("Escolha uma opção", choices=["1", "2", "3", "4", "5", "6", "7", "8", "0"])
 
 
 def ver_saldo_atual():
@@ -71,6 +76,21 @@ def main():
             with console.status("[bold green]Carregando dashboard...[/bold green]"):
                 time.sleep(0.4)
             mostrar_dashboard()
+        
+        elif opcao == '6':
+            with console.status("[bold green]Buscando Entradas...[/bold green]"):
+                time.sleep(0.4)
+            mostrar_entradas()
+
+        elif opcao == '7':
+            with console.status("[bold green]Buscando gastos...[/bold green]"):
+                time.sleep(0.4)
+            mostrar_gastos()
+        
+        elif opcao == '8':
+            with console.status("[bold green]Carregando menu de análises...[/bold green]"):
+                time.sleep(0.4)
+            menu_analises()
         
         elif opcao == '0':
             aviso('ENCERRANDO O PROGRAMA.')

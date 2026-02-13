@@ -12,7 +12,7 @@ def grafico_gastos_mensais(mes, ano):
         WHERE strftime('%m', data) = ?
         AND strftime('%Y', data) = ?
         GROUP BY categoria
-    """, f"{mes:02d}", str(ano))
+    """, (f"{mes:02d}", str(ano)))
 
     rows = cursor.fetchall()
     conn.close()
@@ -26,7 +26,7 @@ def grafico_gastos_mensais(mes, ano):
 
     plt.figure()
     plt.bar(categorias, valores)
-    plt.title(f'Gastor por categoria - {mes:02d}/{ano}')
+    plt.title(f'Gastos por categoria - {mes:02d}/{ano}')
     plt.xlabel("Categoria")
     plt.ylabel("Valor")
     plt.xticks(rotation=45)
@@ -51,7 +51,7 @@ def evolucao_saldo(ano):
 
     cursor.execute("""
         SELECT 
-            strftime('%m', data) as mes
+            strftime('%m', data) as mes,
             SUM(valor) as total
         FROM gastos
         WHERE strftime('%Y', data) = ?
