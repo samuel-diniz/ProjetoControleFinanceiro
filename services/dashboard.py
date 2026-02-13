@@ -5,6 +5,7 @@ from rich.prompt import Prompt
 from rich.panel import Panel
 from database.connection import get_connection
 from utils.ui import console, mostrar_saldo, titulo, erro
+from utils.validators import validar_mes, validar_ano
 from database.repository import obter_totais_mes
 
 
@@ -24,13 +25,13 @@ def menu_dashboard():
 
 
 def ver_mes_especifico():
-    mes = int(Prompt.ask('Mês (1-12)'))
+    mes = None
+    while mes is None:
+        mes = validar_mes()
 
-    if mes < 1 or mes > 12:
-        erro("Mês Inválido.")
-        return
-    
-    ano = int(Prompt.ask('Ano'))
+    ano = None
+    while ano is None:
+        ano = validar_ano()
 
     entradas, gastos = obter_totais_mes(mes, ano)
     saldo = entradas - gastos
@@ -51,12 +52,22 @@ def ver_mes_especifico():
 
 def comparar_meses():
     console.print("\n[bold]Primeiro período[/bold]")
-    mes1 = int(Prompt.ask('Mês'))
-    ano1 = int(Prompt.ask('Ano'))
+    mes1 = None
+    while mes1 is None:
+        mes1 = validar_mes()
+    
+    ano1 = None
+    while ano1 is None:
+        ano1 = validar_ano()
 
     console.print("\n[bold]Segundo período[/bold]")
-    mes2 = int(Prompt.ask('Mês'))
-    ano2 = int(Prompt.ask('Ano'))
+    mes2 = None
+    while mes2 is None:
+        mes2 = validar_mes()
+
+    ano2 = None
+    while ano2 is None:
+        ano2 = validar_ano()
 
     e1, g1 = obter_totais_mes(mes1, ano1)
     e2, g2 = obter_totais_mes(mes2, ano2)
@@ -74,8 +85,13 @@ def comparar_meses():
 
 
 def top_categorias():
-    mes = int(Prompt.ask('Mês'))
-    ano = int(Prompt.ask('Ano'))
+    mes = None
+    while mes is None:
+        mes = validar_mes()
+
+    ano = None
+    while ano is None:
+        ano = validar_ano()
 
     conn = get_connection()
     cursor = conn.cursor()

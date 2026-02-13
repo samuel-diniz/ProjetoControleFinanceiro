@@ -1,6 +1,6 @@
 from rich.panel import Panel
 from rich.prompt import Prompt
-from utils.ui import console, titulo
+from utils.ui import console
 from services.charts import grafico_gastos_mensais, evolucao_saldo
 from services.report_excel import exportar_excel
 from services.report_pdf import exportar_pdf
